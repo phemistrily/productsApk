@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ProductStock{% endblock %}
+
+{% block body %}
+    <h1>ProductStock</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ product_stock.id }}</td>
+            </tr>
+            <tr>
+                <th>Expiration_date</th>
+                <td>{{ product_stock.expirationDate ? product_stock.expirationDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Quantity</th>
+                <td>{{ product_stock.quantity }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('product_stock_index') }}">back to list</a>
+
+    <a href="{{ path('product_stock_edit', {'id': product_stock.id}) }}">edit</a>
+
+    {{ include('product_stock/_delete_form.html.twig') }}
+{% endblock %}

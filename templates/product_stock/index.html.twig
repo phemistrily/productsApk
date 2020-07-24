@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ProductStock index{% endblock %}
+
+{% block body %}
+    <h1>ProductStock index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Expiration_date</th>
+                <th>Quantity</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product_stock in product_stocks %}
+            <tr>
+                <td>{{ product_stock.id }}</td>
+                <td>{{ product_stock.expirationDate ? product_stock.expirationDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ product_stock.quantity }}</td>
+                <td>
+                    <a href="{{ path('product_stock_show', {'id': product_stock.id}) }}">show</a>
+                    <a href="{{ path('product_stock_edit', {'id': product_stock.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('product_stock_new') }}">Create new</a>
+{% endblock %}

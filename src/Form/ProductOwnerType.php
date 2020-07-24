@@ -6,6 +6,8 @@ use App\Entity\ProductOwner;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Entity\Product;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class ProductOwnerType extends AbstractType
 {
@@ -13,7 +15,6 @@ class ProductOwnerType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('products')
         ;
     }
 

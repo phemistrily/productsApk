@@ -6,6 +6,9 @@
         {% block stylesheets %}{{ encore_entry_link_tags('app') }}{% endblock %}
     </head>
     <body>
+    <a href="{{ path('product_index') }}">Produkty</a>
+    <a href="{{ path('product_owner_index') }}">Właściciele</a>
+    <a href="{{ path('product_stock_index') }}">Stan magazynowy</a>
         {% block body %}{% endblock %}
         {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
     </body>
