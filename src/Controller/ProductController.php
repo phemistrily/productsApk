@@ -31,7 +31,7 @@ class ProductController extends AbstractController
     /**
      * @Route("/new", name="product_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, ProductRepository $productRepository): Response
     {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
@@ -40,17 +40,24 @@ class ProductController extends AbstractController
         
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (!$this->checkEan13IsCorrect($product->getBarCodeEan13())) {
+            if (!$productRepository->checkEan13IsCorrect($product->getBarCodeEan13())) {
                 $form->get('bar_code_ean13')->addError(new FormError('Kod jest nie prawidłowy'));
                 return $this->render('product/edit.html.twig', [
                     'product' => $product,
                     'form' => $form->createView(),
                 ]);
             }
+            
             else {
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($product);
-                $entityManager->flush();
+                try {
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($product);
+                    $entityManager->flush();
+                } catch (\Throwable $th) {
+                    //throw $th;
+                }
+                    
+                
             }
             
 
@@ -61,23 +68,6 @@ class ProductController extends AbstractController
             'product' => $product,
             'form' => $form->createView(),
         ]);
-    }
-
-    private function checkEan13IsCorrect(string $ean13): bool
-    {
-        if (strlen($ean13) != 13) {
-            return false;
-        }
-        $evenSum = $ean13[1] + $ean13[3] + $ean13[5] + $ean13[7] + $ean13[9] + $ean13[11];
-        $evenSum *= 3;
-        $oddSum = $ean13[0] + $ean13[2] + $ean13[4] + $ean13[6] + $ean13[8] + $ean13[10];
-        $totalSum = $evenSum + $oddSum;
-        $nextTen = (ceil($totalSum/10))*10;
-        $checkDigit = $nextTen - $totalSum;
-        if($checkDigit != $ean13[12]) {
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -93,13 +83,13 @@ class ProductController extends AbstractController
     /**
      * @Route("/{id}/edit", name="product_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Product $product): Response
+    public function edit(Request $request, Product $product, ProductRepository $productRepository): Response
     {
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (!$this->checkEan13IsCorrect($product->getBarCodeEan13())) {
+            if (!$productRepository->checkEan13IsCorrect($product->getBarCodeEan13())) {
                 $form->get('bar_code_ean13')->addError(new FormError('Kod jest nie prawidłowy'));
                 return $this->render('product/edit.html.twig', [
                     'product' => $product,

@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Przeterminowane stany magazynowe{% endblock %}
+
+{% block body %}
+    <h1>ProductOwner index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Ilość</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for expired_stock in expired_stocks %}
+            <tr>
+                <td>{{ expired_stock.id }}</td>
+                <td>{{ expired_stock.quantity }}</td>
+
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('product_owner_new') }}">Create new</a>
+{% endblock %}

@@ -45,6 +45,33 @@ class ProductRepository extends ServiceEntityRepository
         return $query->execute();
     }
 
+    public function checkEan13IsCorrect(string $ean13): bool
+    {
+        if (strlen($ean13) != 13) {
+            return false;
+        }
+        $evenSum = $ean13[1] + $ean13[3] + $ean13[5] + $ean13[7] + $ean13[9] + $ean13[11];
+        $evenSum *= 3;
+        $oddSum = $ean13[0] + $ean13[2] + $ean13[4] + $ean13[6] + $ean13[8] + $ean13[10];
+        $totalSum = $evenSum + $oddSum;
+        $nextTen = (ceil($totalSum/10))*10;
+        $checkDigit = $nextTen - $totalSum;
+        if($checkDigit != $ean13[12]) {
+            return false;
+        }
+        return true;
+    }
+
+    public function checkIfExistEan13(string $ean13): array
+    {
+        $sql = $this->createQueryBuilder('p')
+            ->where('p.bar_code_ean13 = :ean13')
+            ->setParameter('ean13', $ean13)
+        ;
+        $query = $sql->getQuery();
+        return $query->execute();
+    }
+
     // /**
     //  * @return Product[] Returns an array of Product objects
     //  */

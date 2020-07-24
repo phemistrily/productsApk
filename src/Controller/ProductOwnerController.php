@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\ProductOwner;
 use App\Form\ProductOwnerType;
 use App\Repository\ProductOwnerRepository;
+use App\Repository\ProductStockRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -90,5 +91,16 @@ class ProductOwnerController extends AbstractController
         }
 
         return $this->redirectToRoute('product_owner_index');
+    }
+
+    /**
+     * @Route("/{id}/expired", name="product_owner_expired", methods={"GET"})
+     */
+    public function getExpiredProducts(ProductStockRepository $productStockRepository, int $id)
+    {
+        $expiredStock = $productStockRepository->findExpiredByProductOwner($id);
+        return $this->render('product_owner/expired.html.twig', [
+            'expired_stocks' => $expiredStock,
+        ]);
     }
 }
