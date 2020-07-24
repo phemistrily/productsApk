@@ -19,6 +19,16 @@ class ProductStockRepository extends ServiceEntityRepository
         parent::__construct($registry, ProductStock::class);
     }
 
+    public function findExpiredByProductOwner(int $productOwnerId): array
+    {
+        $sql = $this->createQueryBuilder('ps')
+            ->where('ps.product_owner = :product_owner_id', 'ps.expiration_date < CURRENT_TIMESTAMP()')
+            ->setParameter('product_owner_id', $productOwnerId)
+        ;
+        $query = $sql->getQuery();
+        return $query->execute();
+    }
+
     // /**
     //  * @return ProductStock[] Returns an array of ProductStock objects
     //  */

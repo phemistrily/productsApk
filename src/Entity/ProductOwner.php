@@ -29,9 +29,15 @@ class ProductOwner
      */
     private $products;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ProductStock::class, mappedBy="productOwner", orphanRemoval=true)
+     */
+    private $productStocks;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->productStocks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,6 +80,37 @@ class ProductOwner
         if ($this->products->contains($product)) {
             $this->products->removeElement($product);
             $product->removeProductOwner($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProductStock[]
+     */
+    public function getProductStocks(): Collection
+    {
+        return $this->productStocks;
+    }
+
+    public function addProductStock(ProductStock $productStock): self
+    {
+        if (!$this->productStocks->contains($productStock)) {
+            $this->productStocks[] = $productStock;
+            $productStock->setProductOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductStock(ProductStock $productStock): self
+    {
+        if ($this->productStocks->contains($productStock)) {
+            $this->productStocks->removeElement($productStock);
+            // set the owning side to null (unless already changed)
+            if ($productStock->getProductOwner() === $this) {
+                $productStock->setProductOwner(null);
+            }
         }
 
         return $this;

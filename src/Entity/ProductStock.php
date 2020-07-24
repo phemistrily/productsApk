@@ -28,6 +28,17 @@ class ProductStock
      */
     private $product;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=ProductOwner::class, inversedBy="productStocks")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $product_owner;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $quantity;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -53,6 +64,30 @@ class ProductStock
     public function setProduct(?Product $product): self
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    public function getProductOwner(): ?ProductOwner
+    {
+        return $this->product_owner;
+    }
+
+    public function setProductOwner(?ProductOwner $product_owner): self
+    {
+        $this->product_owner = $product_owner;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
 
         return $this;
     }

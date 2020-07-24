@@ -19,6 +19,21 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+    public function findByEan13(string $ean13, bool $byFullString = false): array 
+    {
+        if(!$byFullString)
+        {
+            $ean13 = '%'.$ean13.'%';
+        }
+        $sql = $this->createQueryBuilder('p')
+            ->where('p.bar_code_ean13 LIKE :ean13')
+            ->orderBy('p.id', 'DESC')
+            ->setParameter('ean13', $ean13)
+            ;
+        $query = $sql->getQuery();
+        return $query->execute();
+    }
+
     // /**
     //  * @return Product[] Returns an array of Product objects
     //  */
