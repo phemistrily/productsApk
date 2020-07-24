@@ -14,6 +14,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProductRepository extends ServiceEntityRepository
 {
+    private const LIMIT_ON_PAGE = 50;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Product::class);
@@ -21,8 +23,7 @@ class ProductRepository extends ServiceEntityRepository
 
     public function findByEan13(string $ean13, bool $byFullString = false): array 
     {
-        if(!$byFullString)
-        {
+        if(!$byFullString) {
             $ean13 = '%'.$ean13.'%';
         }
         $sql = $this->createQueryBuilder('p')
@@ -30,6 +31,16 @@ class ProductRepository extends ServiceEntityRepository
             ->orderBy('p.id', 'DESC')
             ->setParameter('ean13', $ean13)
             ;
+        $query = $sql->getQuery();
+        return $query->execute();
+    }
+
+    public function findNewest(int $page): array
+    {
+        $sql = $this->createQueryBuilder('p')
+            ->setFirstResult(($page-1)*self::LIMIT_ON_PAGE)
+            ->setMaxResults($page*self::LIMIT_ON_PAGE)
+        ;
         $query = $sql->getQuery();
         return $query->execute();
     }

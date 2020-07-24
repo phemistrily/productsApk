@@ -9,12 +9,18 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Produkty</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'E:/xampp/htdocs/productsApk/src/Controller/ProductController.php'|file_link(0) }}">src/Controller/ProductController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'E:/xampp/htdocs/productsApk/templates/product/index.html.twig'|file_link(0) }}">templates/product/index.html.twig</a></code></li>
-    </ul>
+    <div class="row">
+        {% for product in products %}
+        <a class="col-md-4 col-12 p-2" href="{{ path('product-show', {id: product.id})}}">
+            <div class="box-product p-2">
+                {{ product.name }} <br />
+
+                produkt nie zawiera opisu
+            </div>
+        </a>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
