@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ProductOwner{% endblock %}
+
+{% block body %}
+    <h1>Edit ProductOwner</h1>
+
+    {{ include('product_owner/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('product_owner_index') }}">back to list</a>
+
+    {{ include('product_owner/_delete_form.html.twig') }}
+{% endblock %}

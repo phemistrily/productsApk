@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ProductOwner index{% endblock %}
+
+{% block body %}
+    <h1>ProductOwner index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product_owner in product_owners %}
+            <tr>
+                <td>{{ product_owner.id }}</td>
+                <td>{{ product_owner.name }}</td>
+                <td>
+                    <a href="{{ path('product_owner_show', {'id': product_owner.id}) }}">show</a>
+                    <a href="{{ path('product_owner_edit', {'id': product_owner.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('product_owner_new') }}">Create new</a>
+{% endblock %}

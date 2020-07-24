@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ProductOwner{% endblock %}
+
+{% block body %}
+    <h1>Create new ProductOwner</h1>
+
+    {{ include('product_owner/_form.html.twig') }}
+
+    <a href="{{ path('product_owner_index') }}">back to list</a>
+{% endblock %}
